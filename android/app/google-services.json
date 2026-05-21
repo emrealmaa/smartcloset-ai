@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "970375667220",
+    "project_id": "smartcloset-ai-eac64",
+    "storage_bucket": "smartcloset-ai-eac64.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970375667220:android:7bd904ff5083c2b9aa1101",
+        "android_client_info": {
+          "package_name": "com.example.smartcloset_ai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2YlAojJTrGawKpYsCq-xBYs1EKR8aHuc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
