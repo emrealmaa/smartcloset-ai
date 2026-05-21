@@ -9,6 +9,7 @@ import '../../core/enums/body_enums.dart';
 import '../../core/enums/face_enums.dart';
 import '../../models/character_profile.dart';
 import '../closet/closet_screen.dart';
+import '../education/education_screen.dart';
 import '../outfit/outfit_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -125,12 +126,15 @@ class _HomeBody extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                const _ComingSoonCard(
+                _ActiveFeatureCard(
                   icon: Icons.school_outlined,
                   title: 'Stil Eğitimi',
                   subtitle:
                       'Kişisel renk kuralların, fit rehberin, desen dersleri',
-                  phase: 'Faz 4',
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => const EducationScreen()),
+                  ),
                 ),
                 const SizedBox(height: 32),
               ],
@@ -294,82 +298,6 @@ class _ActiveFeatureCard extends StatelessWidget {
                 color: Colors.white38, size: 14),
           ],
         ),
-      ),
-    );
-  }
-}
-
-// ── Coming Soon Card ──────────────────────────────────────────────
-class _ComingSoonCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final String phase;
-
-  const _ComingSoonCard({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.phase,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppTheme.warmWhite,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.softGray),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              color: AppTheme.softGray,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(icon, color: AppTheme.mediumGray, size: 20),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: GoogleFonts.spaceGrotesk(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: AppTheme.charcoal,
-                  ),
-                ),
-                Text(
-                  subtitle,
-                  style: GoogleFonts.spaceGrotesk(
-                      fontSize: 12, color: AppTheme.textSecondary),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(
-              color: AppTheme.softGray,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              phase,
-              style: GoogleFonts.spaceGrotesk(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: AppTheme.mediumGray,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
