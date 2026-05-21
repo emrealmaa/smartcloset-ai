@@ -9,6 +9,7 @@ import '../../core/enums/body_enums.dart';
 import '../../core/enums/face_enums.dart';
 import '../../models/character_profile.dart';
 import '../closet/closet_screen.dart';
+import '../outfit/outfit_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -96,7 +97,7 @@ class _HomeBody extends StatelessWidget {
 
                 const SizedBox(height: 24),
                 Text(
-                  'Yakında Gelecek',
+                  'Özellikler',
                   style: GoogleFonts.spaceGrotesk(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
@@ -114,11 +115,14 @@ class _HomeBody extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                const _ComingSoonCard(
+                _ActiveFeatureCard(
                   icon: Icons.style_outlined,
                   title: 'Kombin Motoru',
                   subtitle: 'Vücut tipine özel kombinler + NEDEN açıklaması',
-                  phase: 'Faz 3',
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => const OutfitScreen()),
+                  ),
                 ),
                 const SizedBox(height: 10),
                 const _ComingSoonCard(
