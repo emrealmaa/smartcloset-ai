@@ -11,6 +11,7 @@ import '../../models/character_profile.dart';
 import '../closet/closet_screen.dart';
 import '../education/education_screen.dart';
 import '../outfit/outfit_screen.dart';
+import '../profile/profile_edit_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -170,7 +171,7 @@ class _ProfileSummaryCard extends StatelessWidget {
                 width: 42,
                 height: 42,
                 decoration: BoxDecoration(
-                  color: AppTheme.neonGreen.withOpacity(0.2),
+                  color: AppTheme.neonGreen.withValues(alpha: 0.2),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.person_outline,
@@ -195,6 +196,21 @@ class _ProfileSummaryCard extends StatelessWidget {
                       ),
                     ),
                   ],
+                ),
+              ),
+              GestureDetector(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (_) => const ProfileEditScreen()),
+                ),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white12,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(Icons.edit_outlined,
+                      color: Colors.white60, size: 16),
                 ),
               ),
             ],
@@ -268,7 +284,7 @@ class _ActiveFeatureCard extends StatelessWidget {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: AppTheme.neonGreen.withOpacity(0.2),
+                color: AppTheme.neonGreen.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(icon, color: AppTheme.neonGreen, size: 20),

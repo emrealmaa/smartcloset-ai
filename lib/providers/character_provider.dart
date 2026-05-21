@@ -235,3 +235,190 @@ final onboardingProvider =
     StateNotifierProvider<OnboardingNotifier, OnboardingState>(
   (_) => OnboardingNotifier(),
 );
+
+// ── Profile Edit State ────────────────────────────────────────────
+class ProfileEditState {
+  final int heightCm;
+  final double weightKg;
+  final BodyType bodyType;
+  final ShoulderWidth shoulderWidth;
+  final TorsoLength torsoLength;
+  final LegLength legLength;
+  final SkinDepth skinDepth;
+  final SkinUndertone skinUndertone;
+  final FaceShape faceShape;
+  final EyeColor eyeColor;
+  final HairColor hairColor;
+  final HairLength hairLength;
+  final HairTexture hairTexture;
+  final BeardStyle beardStyle;
+  final List<StyleGoal> styleGoals;
+  final DateTime originalCreatedAt;
+  final bool isSaving;
+  final bool saved;
+  final String? error;
+
+  const ProfileEditState({
+    required this.heightCm,
+    required this.weightKg,
+    required this.bodyType,
+    required this.shoulderWidth,
+    required this.torsoLength,
+    required this.legLength,
+    required this.skinDepth,
+    required this.skinUndertone,
+    required this.faceShape,
+    required this.eyeColor,
+    required this.hairColor,
+    required this.hairLength,
+    required this.hairTexture,
+    required this.beardStyle,
+    required this.styleGoals,
+    required this.originalCreatedAt,
+    this.isSaving = false,
+    this.saved = false,
+    this.error,
+  });
+
+  factory ProfileEditState.fromProfile(CharacterProfile p) => ProfileEditState(
+        heightCm: p.heightCm,
+        weightKg: p.weightKg,
+        bodyType: p.bodyType,
+        shoulderWidth: p.shoulderWidth,
+        torsoLength: p.torsoLength,
+        legLength: p.legLength,
+        skinDepth: p.skinDepth,
+        skinUndertone: p.skinUndertone,
+        faceShape: p.faceShape,
+        eyeColor: p.eyeColor,
+        hairColor: p.hairColor,
+        hairLength: p.hairLength,
+        hairTexture: p.hairTexture,
+        beardStyle: p.beardStyle,
+        styleGoals: p.styleGoals,
+        originalCreatedAt: p.createdAt,
+      );
+
+  ProfileEditState copyWith({
+    int? heightCm,
+    double? weightKg,
+    BodyType? bodyType,
+    ShoulderWidth? shoulderWidth,
+    TorsoLength? torsoLength,
+    LegLength? legLength,
+    SkinDepth? skinDepth,
+    SkinUndertone? skinUndertone,
+    FaceShape? faceShape,
+    EyeColor? eyeColor,
+    HairColor? hairColor,
+    HairLength? hairLength,
+    HairTexture? hairTexture,
+    BeardStyle? beardStyle,
+    List<StyleGoal>? styleGoals,
+    bool? isSaving,
+    bool? saved,
+    String? error,
+  }) =>
+      ProfileEditState(
+        heightCm: heightCm ?? this.heightCm,
+        weightKg: weightKg ?? this.weightKg,
+        bodyType: bodyType ?? this.bodyType,
+        shoulderWidth: shoulderWidth ?? this.shoulderWidth,
+        torsoLength: torsoLength ?? this.torsoLength,
+        legLength: legLength ?? this.legLength,
+        skinDepth: skinDepth ?? this.skinDepth,
+        skinUndertone: skinUndertone ?? this.skinUndertone,
+        faceShape: faceShape ?? this.faceShape,
+        eyeColor: eyeColor ?? this.eyeColor,
+        hairColor: hairColor ?? this.hairColor,
+        hairLength: hairLength ?? this.hairLength,
+        hairTexture: hairTexture ?? this.hairTexture,
+        beardStyle: beardStyle ?? this.beardStyle,
+        styleGoals: styleGoals ?? this.styleGoals,
+        originalCreatedAt: originalCreatedAt,
+        isSaving: isSaving ?? this.isSaving,
+        saved: saved ?? this.saved,
+        error: error,
+      );
+}
+
+// ── Profile Edit Notifier ─────────────────────────────────────────
+class ProfileEditNotifier extends StateNotifier<ProfileEditState> {
+  final CharacterRepository _repo;
+  final Ref _ref;
+
+  ProfileEditNotifier(this._repo, this._ref, CharacterProfile initial)
+      : super(ProfileEditState.fromProfile(initial));
+
+  void setHeight(int cm) => state = state.copyWith(heightCm: cm);
+  void setWeight(double kg) => state = state.copyWith(weightKg: kg);
+  void setBodyType(BodyType v) => state = state.copyWith(bodyType: v);
+  void setShoulderWidth(ShoulderWidth v) =>
+      state = state.copyWith(shoulderWidth: v);
+  void setTorsoLength(TorsoLength v) => state = state.copyWith(torsoLength: v);
+  void setLegLength(LegLength v) => state = state.copyWith(legLength: v);
+  void setSkinDepth(SkinDepth v) => state = state.copyWith(skinDepth: v);
+  void setSkinUndertone(SkinUndertone v) =>
+      state = state.copyWith(skinUndertone: v);
+  void setFaceShape(FaceShape v) => state = state.copyWith(faceShape: v);
+  void setEyeColor(EyeColor v) => state = state.copyWith(eyeColor: v);
+  void setHairColor(HairColor v) => state = state.copyWith(hairColor: v);
+  void setHairLength(HairLength v) => state = state.copyWith(hairLength: v);
+  void setHairTexture(HairTexture v) => state = state.copyWith(hairTexture: v);
+  void setBeardStyle(BeardStyle v) => state = state.copyWith(beardStyle: v);
+
+  void toggleStyleGoal(StyleGoal goal) {
+    final current = List<StyleGoal>.from(state.styleGoals);
+    if (current.contains(goal)) {
+      current.remove(goal);
+    } else {
+      current.add(goal);
+    }
+    state = state.copyWith(styleGoals: current);
+  }
+
+  Future<bool> save() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return false;
+    state = state.copyWith(isSaving: true, error: null);
+    try {
+      final s = state;
+      final profile = CharacterProfile(
+        userId: user.uid,
+        heightCm: s.heightCm,
+        weightKg: s.weightKg,
+        bodyType: s.bodyType,
+        shoulderWidth: s.shoulderWidth,
+        torsoLength: s.torsoLength,
+        legLength: s.legLength,
+        skinDepth: s.skinDepth,
+        skinUndertone: s.skinUndertone,
+        faceShape: s.faceShape,
+        eyeColor: s.eyeColor,
+        hairColor: s.hairColor,
+        hairLength: s.hairLength,
+        hairTexture: s.hairTexture,
+        beardStyle: s.beardStyle,
+        styleGoals: s.styleGoals,
+        createdAt: s.originalCreatedAt,
+        updatedAt: DateTime.now(),
+      );
+      await _repo.saveProfile(profile);
+      _ref.invalidate(characterProfileProvider);
+      state = state.copyWith(isSaving: false, saved: true);
+      return true;
+    } catch (e) {
+      state = state.copyWith(isSaving: false, error: e.toString());
+      return false;
+    }
+  }
+}
+
+final profileEditProvider = StateNotifierProvider.autoDispose<
+    ProfileEditNotifier, ProfileEditState>(
+  (ref) {
+    final repo = ref.read(characterRepositoryProvider);
+    final profile = ref.read(characterProfileProvider).value!;
+    return ProfileEditNotifier(repo, ref, profile);
+  },
+);
