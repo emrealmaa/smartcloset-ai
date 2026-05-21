@@ -5,7 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../providers/character_provider.dart';
 import '../../theme/app_theme.dart';
 import '../../core/enums/skin_enums.dart';
+import '../../core/enums/body_enums.dart';
+import '../../core/enums/face_enums.dart';
 import '../../models/character_profile.dart';
+import '../closet/closet_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -101,18 +104,20 @@ class _HomeBody extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                const _ComingSoonCard(
+                _ActiveFeatureCard(
                   icon: Icons.checkroom_outlined,
                   title: 'Dijital Gardırop',
                   subtitle: 'Kıyafetlerini ekle, envanterini yönet',
-                  phase: 'Faz 2',
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => const ClosetScreen()),
+                  ),
                 ),
                 const SizedBox(height: 10),
                 const _ComingSoonCard(
                   icon: Icons.style_outlined,
                   title: 'Kombin Motoru',
-                  subtitle:
-                      'Vücut tipine özel kombinler + NEDEN açıklaması',
+                  subtitle: 'Vücut tipine özel kombinler + NEDEN açıklaması',
                   phase: 'Faz 3',
                 ),
                 const SizedBox(height: 10),
@@ -186,11 +191,9 @@ class _ProfileSummaryCard extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 16),
           const Divider(color: Colors.white12, height: 1),
           const SizedBox(height: 16),
-
           Text(
             'RENK PALETİN',
             style: GoogleFonts.spaceGrotesk(
@@ -214,15 +217,79 @@ class _ProfileSummaryCard extends StatelessWidget {
               );
             }).toList(),
           ),
-
           const SizedBox(height: 16),
           Text(
             '${profile.heightCm} cm · ${profile.weightKg.round()} kg · '
             '${profile.faceShape.label} yüz · ${profile.beardStyle.label} sakal',
-            style: GoogleFonts.spaceGrotesk(
-                fontSize: 12, color: Colors.white54),
+            style:
+                GoogleFonts.spaceGrotesk(fontSize: 12, color: Colors.white54),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ── Active Feature Card ───────────────────────────────────────────
+class _ActiveFeatureCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const _ActiveFeatureCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppTheme.charcoal,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: AppTheme.neonGreen.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: AppTheme.neonGreen, size: 20),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: GoogleFonts.spaceGrotesk(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: GoogleFonts.spaceGrotesk(
+                        fontSize: 12, color: Colors.white54),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.arrow_forward_ios,
+                color: Colors.white38, size: 14),
+          ],
+        ),
       ),
     );
   }
